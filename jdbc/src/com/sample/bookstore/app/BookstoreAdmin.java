@@ -7,7 +7,7 @@ import com.sample.bookstore.dao.BookDAO;
 import com.sample.bookstore.util.KeyboardUtil;
 import com.sample.bookstore.vo.Book;
 
-public class BookstoreApp {
+public class BookstoreAdmin {
 	
 	private static void displayBooks(List<Book> books) {
 		System.out.println("------------------------------------------------------------------------------------");
