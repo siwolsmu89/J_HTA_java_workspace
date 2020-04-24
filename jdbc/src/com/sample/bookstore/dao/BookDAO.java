@@ -28,6 +28,7 @@ public class BookDAO {
 		book.setDiscountPrice(rs.getInt("book_price"));
 		book.setPrice(rs.getInt("book_discount_price"));
 		book.setRegisteredDate(rs.getDate("book_registered_date"));
+		book.setStock(rs.getInt("book_stock"));
 
 		return book;
 	}

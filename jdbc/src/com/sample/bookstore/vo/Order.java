@@ -5,8 +5,8 @@ import java.util.Date;
 public class Order {
 	
 	private int orderNo;
-	private String userId;
-	private int bookNo;
+	private User user;
+	private Book book;
 	private int price;
 	private int amount;
 	private Date registredDate;
@@ -21,18 +21,22 @@ public class Order {
 	public void setOrderNo(int orderNo) {
 		this.orderNo = orderNo;
 	}
-	public String getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	
+	public void setUser(User user) {
+		this.user = user;
 	}
-	public int getBookNo() {
-		return bookNo;
+	
+	public Book getBook() {
+		return book;
 	}
-	public void setBookNo(int bookNo) {
-		this.bookNo = bookNo;
+	
+	public void setBook(Book book) {
+		this.book = book;
 	}
+	
 	public int getPrice() {
 		return price;
 	}

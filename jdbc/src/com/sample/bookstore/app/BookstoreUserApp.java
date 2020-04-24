@@ -13,7 +13,7 @@ public class BookstoreUserApp {
 			System.out.println("---------------------------------------");
 			System.out.println("[UserDAO 기능 확인 APP]");
 			System.out.println("---------------------------------------");
-			System.out.println("1.등록  2.조회  0.종료");
+			System.out.println("1.등록  2.조회  3.수정  0.종료");
 			System.out.println("---------------------------------------");
 			System.out.print("메뉴를 선택하세요: ");
 			int menuNo = KeyboardUtil.nextInt();
@@ -38,8 +38,6 @@ public class BookstoreUserApp {
 				user.setName(KeyboardUtil.nextString());
 				System.out.print("메일 주소를 입력하세요: ");
 				user.setEmail(KeyboardUtil.nextString());
-				System.out.print("포인트를 입력하세요: ");
-				user.setPoint(KeyboardUtil.nextInt());
 				
 				userDao.addUser(user);
 				System.out.println("등록 절차가 완료되었습니다.");
@@ -63,6 +61,24 @@ public class BookstoreUserApp {
 				System.out.println("이 메 일 : " + user.getEmail());
 				System.out.println("포 인 트 : " + user.getPoint());
 				System.out.println("가입일자 : " + user.getRegisterdDate());
+				System.out.println("---------------------------------------");
+			} else if (menuNo == 3) {
+				System.out.println("---------------------------------------");
+				System.out.println("[고객 정보 아이디로 조회]");
+				System.out.println("---------------------------------------");
+				
+				User user = new User();
+				System.out.print("수정하려는 고객ID를 입력하세요: ");
+				user.setId(KeyboardUtil.nextString());
+				System.out.print("비밀번호를 입력하세요: ");
+				user.setPassword(KeyboardUtil.nextString());
+				System.out.print("이메일 주소를 입력하세요: ");
+				user.setEmail(KeyboardUtil.nextString());
+				System.out.print("포인트를 입력하세요: ");
+				user.setPoint(KeyboardUtil.nextInt());
+				
+				userDao.updateUser(user);
+				System.out.println("수정 절차가 완료되었습니다.");
 				System.out.println("---------------------------------------");
 			}
 		}

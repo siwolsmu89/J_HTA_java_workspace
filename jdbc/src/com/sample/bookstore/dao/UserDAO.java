@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.sample.bookstore.util.ConnectionUtil;
+import com.sample.bookstore.util.QueryUtil;
 import com.sample.bookstore.vo.User;
 
 public class UserDAO {
@@ -24,19 +25,14 @@ public class UserDAO {
 	}
 
 	public void addUser(User user) throws Exception {
-		String sql = "INSERT INTO sample_book_users "
-				+ "(user_id, user_password, user_name, user_email, user_point, user_registered_date) "
-				+ "VALUES " 
-				+ "(?, ?, ?, ?, ?, SYSDATE)";
-
 		Connection connection = ConnectionUtil.getConnection();
-		PreparedStatement pstmt = connection.prepareStatement(sql);
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("user.addUser"));
+		
 		pstmt.setString(1, user.getId());
 		pstmt.setString(2, user.getPassword());
 		pstmt.setString(3, user.getName());
 		pstmt.setString(4, user.getEmail());
-		pstmt.setInt(5, user.getPoint());
-		
+
 		pstmt.executeUpdate();
 		
 		pstmt.close();
@@ -46,15 +42,12 @@ public class UserDAO {
 	public User getUserById(String userId) throws Exception {
 		User user = null;
 		
-		String sql = "SELECT * "
-				+ "FROM sample_book_users "
-				+ "WHERE user_id = ? ";
-		
 		Connection connection = ConnectionUtil.getConnection();
-		PreparedStatement pstmt = connection.prepareStatement(sql);
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("user.getUserById"));
 		pstmt.setString(1, userId);
 		
 		ResultSet rs = pstmt.executeQuery();
+		
 		if(rs.next()) {
 			user = resultSetToUser(rs);
 		}
@@ -64,6 +57,18 @@ public class UserDAO {
 		connection.close();
 		
 		return user;
+	}
+	
+	public void updateUser(User user) throws Exception {
+		Connection connection = ConnectionUtil.getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("user.updateUser"));
+		
+		pstmt.setString(1, user.getPassword());
+		pstmt.setString(2, user.getEmail());
+		pstmt.setInt(3, user.getPoint());
+		pstmt.setString(4, user.getId());
+		
+		pstmt.executeUpdate();
 	}
 	
 }
