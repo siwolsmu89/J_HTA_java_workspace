@@ -1,0 +1,54 @@
+정렬이 가능한 객체로 만들기
+	comparable<T> 인터페이스를 구현해야 한다.
+		int compareTo(T t)
+		- T는 비교대상이 되는 클래스를 적는다
+		비교대상은 항상 이 객체와 똑같은 다른 객체를 비교하는 것이기 때문에
+		comparable을 구현하는 클래스의 이름을 적으면 된다
+		compareTo()메소드는 현재 객체와 다른 객체를 비교해서
+			현재 객체의 값이 다른 객체의 값보다 크면 0보다 큰 정수
+			현재 객체의 값과 다른 객체의 값이 같으면 0
+			현재 객체의 값이 다른 객체의 값보다 작으면 0보다 작은 정수를 반환해야 한다.
+		배열, List<E>, TreeSet<E>에 저장된 객체를 정렬할 수 있다.
+		
+	작성예)
+	public class Score implements comparable<Score>{
+		private int no;
+		private String name;
+		private int totalScore;
+		
+		// compareTo(T t) 재정의하기
+		public int compareTo(Score other){
+			return this.totalScore - other.totalScore;
+		}
+	}
+
+
+객체를 비교할 수 있는 비교기를 만들어서 객체를 정렬하기
+	comparator<T> 인터페이스를 구현한 비교기를 사용해서 객체들을 정렬한다.
+		int compare(T o1, To2)
+		- T는 비교대상이 되는 클래스를 적는다
+		비교기는 비교대상이 되는 객체 2개를 전달받아서 비교한다.
+		- Arrays.sort(배열, 비교기), Collections.sort(리스트, 비교기)
+		- TreeSet<T> set = new TreeSet<E>(비교기);
+	작성예)
+	public class Score {
+		private int no;
+		private String name;
+		private int totalScore;
+	}
+	
+	ArrayList<Score> scores = new ArrayList<Score>();
+	// 비교기는 주로 익명객체의 형태로 사용된다.
+	Collections.sort(scores, new Comparator<Score>() {
+		public int compare(Score s1, Score s2){
+			return s1.getTotalScore() - s2.getTotalScore();
+		}
+	});
+
+	// Java 8의 람다식으로 비교기 구현하기
+	(단, 람다 식을 적기 위해서는 인터페이스 내에 추상화된 메소드가 하나만 존재해야 함)
+		들어가야 할 자리를 통해 Comparator<Score>가 구현될 자리라는 것을 추론 
+		해당 인터페이스에서 구현해야 할 추상메소드가 compare라는 것, 그 반환값이 int라는 것 등을 추론
+		매개변수의 이름, 메소드의 실행결과만 적어주면 나머지 부분은 추론한 내용으로 채워준다.
+	Collections.sort(scores, (s1, s2) -> s1.getTotalScore() - s2.getTotalScore());
+	

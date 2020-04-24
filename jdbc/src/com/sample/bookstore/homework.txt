@@ -1,0 +1,26 @@
+com.sample.bookstore.vo
+	User.java	-- sample_book_users 테이블
+	Order.java	-- sample_book_orders 테이블
+
+com.sample.bookstore.dao
+	UserDAO.java
+		public void addUser(User user) { .. }
+		public User getUserById(String userId){...}
+	OrderDAO.java
+		public void addOrder(Order order) {...}
+		public List<Order> getOrdersByUserId(String userId) {..}
+		public Order getOrderByNo(int orderNo) {..}
+
+// 이하 내일 할 것
+com.sample.bookstore.service
+	BookstoreService.java
+		public void addNewUser(User user) { 같은 아이디가 있는지 확인하고 어쩌고 }
+		public void addNewOrder(Order order) {..}
+		public List<Order> getMyOrders(String userId) {..} 
+		public Order getOrder(int orderNo) {...}
+
+com.sample.bookstore.app
+	Bookstore.java
+	
+	BookstoreUserApp.java	 -- UserDAO 기능 확인용
+	BookstoreOrderApp.java	 -- OrderDAO 기능 확인용
