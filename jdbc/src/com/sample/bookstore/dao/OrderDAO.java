@@ -16,8 +16,6 @@ public class OrderDAO {
 	
 	private Order resultSetToOrder(ResultSet rs) throws Exception {
 		Order order = new Order();
-//		UserDAO userDao = new UserDAO();
-//		BookDAO bookDao = new BookDAO();
 		User user = new User();
 		Book book = new Book();
 		
@@ -27,10 +25,6 @@ public class OrderDAO {
 		order.setOrderNo(rs.getInt("order_no"));
 		order.setUser(user);
 		order.setBook(book);
-//		String userId = rs.getString("user_id");
-//		order.setUser(userDao.getUserById(userId));
-//		int bookNo = rs.getInt("book_no");
-//		order.setBook(bookDao.getBookByNo(bookNo));
 		order.setPrice(rs.getInt("order_price"));
 		order.setAmount(rs.getInt("order_amount"));
 		order.setRegistredDate(rs.getDate("order_registered_date"));

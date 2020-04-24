@@ -60,16 +60,63 @@ public class BookstoreService {
 		return bookDao.getBookByNo(bookNo);
 	}
 	
-	public void 주문하기(String userId, int bookNo, int amount) {
+	/**
+	 * 주문요청을 처리합니다.
+	 * @param userId 주문자 아이디
+	 * @param bookNo 주문할 책번호
+	 * @param amount 주문 수량
+	 * @return 주문 성공시 true를 반환한다.
+	 * @throws Exception
+	 */
+	public boolean makeOrder(String userId, int bookNo, int amount) throws Exception {
+		User user = userDao.getUserById(userId);
+		if (user == null) {
+			return false;
+		}
+		Book book = bookDao.getBookByNo(bookNo);
+		if (book == null) {
+			return false;
+		} else if (book.getStock() < amount) {
+			return false;
+		}
 		
+		Order order = new Order();
+		order.setUser(user);
+		order.setBook(book);
+		order.setPrice(book.getDiscountPrice());
+		order.setAmount(amount);
+		
+		orderDao.addOrder(order);
+		
+		book.setStock(book.getStock() - amount);
+		bookDao.updateBook(book);
+		
+		int point = (int) (order.getAmount() * order.getPrice() * 0.03);
+		user.setPoint(user.getPoint() + point);
+		userDao.updateUser(user);
+		
+		return true;
 	}
 	
-	public List<Order> 내주문조회(String userId){
-		return null;
+	public List<Order> searchMyOrders(String userId) throws Exception{
+		List<Order> orders = orderDao.getOrdersByUserId(userId);
+		
+		for(Order order : orders) {
+			order.setUser(userDao.getUserById(order.getUser().getId()));
+			order.setBook(bookDao.getBookByNo(order.getBook().getNo()));
+		}
+		
+		return orders;
 	}
 	
-	public Order 주문상세정보(int orderNo) {
-		return null;
+	public Order searchOrderByNo(int orderNo) throws Exception {
+		Order order = null;
+		
+		order = orderDao.getOrderByNo(orderNo);
+		order.setUser(userDao.getUserById(order.getUser().getId()));
+		order.setBook(bookDao.getBookByNo(order.getBook().getNo()));
+		
+		return order;
 	}
 	
 }

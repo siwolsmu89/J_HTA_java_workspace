@@ -5,6 +5,7 @@ import java.util.List;
 import com.sample.bookstore.service.BookstoreService;
 import com.sample.bookstore.util.KeyboardUtil;
 import com.sample.bookstore.vo.Book;
+import com.sample.bookstore.vo.Order;
 import com.sample.bookstore.vo.User;
 
 public class Bookstore {
@@ -100,10 +101,47 @@ public class Bookstore {
 				
 			} else if (menuNo == 4) {
 				System.out.println("[주문하기]");
+				
+				System.out.print("주문할 책 번호를 입력하세요: ");
+				int bookNo = KeyboardUtil.nextInt();
+				System.out.print("주문수량을 입력하세요: ");
+				int amount = KeyboardUtil.nextInt();
+				System.out.print("주문자 아이디를 입력하세요: ");
+				String userId = KeyboardUtil.nextString();
+				
+				boolean isSuccess = service.makeOrder(userId, bookNo, amount);
+				
+				if (isSuccess) {
+					System.out.println("### 주문이 완료되었습니다.");
+				} else {
+					System.out.println("!!! 주문처리 중 오류가 발생하였습니다.");
+				}
+				
 			} else if (menuNo == 5) {
 				System.out.println("[내 주문 전부 보기]");
+				System.out.print("주문자 아이디를 입력하세요: ");
+				String userId = KeyboardUtil.nextString();
+				
+				List<Order> orders = service.searchMyOrders(userId);
+				for(Order order : orders) {
+					System.out.println("주문번호: " + order.getOrderNo());
+					System.out.println("주 문 자: " + order.getUser().getName());
+					System.out.println("책 제 목: " + order.getBook().getTitle());
+					System.out.println("수    량: " + order.getAmount());
+					System.out.println("주문일자: " + order.getRegistredDate());
+				}
+				
 			} else if (menuNo == 6) {
 				System.out.println("[주문 정보 보기]");
+				System.out.print("조회할 주문 번호를 입력하세요: ");
+				int orderNo = KeyboardUtil.nextInt();
+				
+				Order order = service.searchOrderByNo(orderNo);
+				System.out.println("주문번호: " + order.getOrderNo());
+				System.out.println("주 문 자: " + order.getUser().getName());
+				System.out.println("책 제 목: " + order.getBook().getTitle());
+				System.out.println("수    량: " + order.getAmount());
+				System.out.println("주문일자: " + order.getRegistredDate());
 			}
 		
 			
