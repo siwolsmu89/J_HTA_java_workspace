@@ -16,8 +16,9 @@ public class Bookstore {
 		
 		while(true) {
 			System.out.println("-------------------------------------------------");
-			System.out.println("1.회원가입  2.검색하기  3.책정보조회");
-			System.out.println("4.주문하기  5.내주문조회  6.주문정보조회  0.종료");
+			System.out.println("1.회원가입  2.검색하기    3.책정보조회");
+			System.out.println("4.주문하기  5.내주문조회  6.주문정보조회");
+			System.out.println("7.문의게시판               0.종료");
 			System.out.println("-------------------------------------------------");
 			
 			System.out.print("메뉴를 선택하세요: ");

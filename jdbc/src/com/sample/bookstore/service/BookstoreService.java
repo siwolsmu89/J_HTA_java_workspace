@@ -10,6 +10,7 @@ import com.sample.bookstore.dao.OrderDAO;
 import com.sample.bookstore.dao.UserDAO;
 import com.sample.bookstore.vo.Book;
 import com.sample.bookstore.vo.Order;
+import com.sample.bookstore.vo.Question;
 import com.sample.bookstore.vo.User;
 
 public class BookstoreService {
@@ -128,6 +129,30 @@ public class BookstoreService {
 	 */
 	public Order searchOrderByNo(int orderNo) throws Exception {
 		return orderDao.getOrderByNo(orderNo);
+	}
+	
+	public boolean 문의등록(Question question) {
+		return false;
+	}
+	
+	public void 답변등록(int questionNo, String content) {
+		
+	}
+	
+	public List<Question> 문의글전체조회(){
+		List<Question> allQuestions = new ArrayList<Question>();
+		
+		return allQuestions;
+	}
+	
+	public Question 문의글조회() {
+		Question question = null;
+		
+		return question;
+	}
+	
+	public void 문의글삭제(String userId, int questionNo) {
+		
 	}
 	
 }
