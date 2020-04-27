@@ -4,8 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.sample.bookstore.dao.BookDAO;
+import com.sample.bookstore.service.BookstoreService;
 import com.sample.bookstore.util.KeyboardUtil;
 import com.sample.bookstore.vo.Book;
+import com.sample.bookstore.vo.Question;
 
 public class BookstoreAdmin {
 	
@@ -22,10 +24,11 @@ public class BookstoreAdmin {
 	
 	public static void main(String[] args) throws Exception {
 		BookDAO bookDao = new BookDAO();
-		
+		BookstoreService service = new BookstoreService();
 		while(true) {
 			System.out.println("-----------------------------------------------");
-			System.out.println("1.전체조회  2.검색  3.등록  4.수정  5.삭제  0.종료");
+			System.out.println("1.전체조회  2.검색  3.등록  4.수정  ");
+			System.out.println("5.삭제      6.문의관리       0.종료");
 			System.out.println("-----------------------------------------------");
 			
 			System.out.print("메뉴를 선택하세요: ");			
@@ -188,6 +191,41 @@ public class BookstoreAdmin {
 					
 				}
 				System.out.println("-------------------------------------");
+			} else if (menuNo == 6) {
+				System.out.println("[문의게시판 관리 메뉴]");
+				System.out.println("-------------------------------------");
+				System.out.println("1.전체조회  2.답변등록");
+				System.out.println("-------------------------------------");
+				System.out.print("관리 메뉴를 선택하세요: ");
+				int qMenuNo = KeyboardUtil.nextInt();
+				
+				if (qMenuNo == 1) {
+					System.out.println("[문의 글 전체조회]");
+					
+					List<Question> allQuestions = service.searchAllQuestions();
+					
+					if (allQuestions.isEmpty()) {
+						System.out.println("!!! 등록된 문의 글이 없습니다.");
+					} else {
+						System.out.println("-------------------------------------------------");
+						System.out.printf("%-3s\t%-20s\t%-3s\t%-3s\t%-10s\n", "문의번호","문의제목","조회수","답변여부","질문유형");
+						for (Question question : allQuestions) {
+							System.out.printf("%-3s\t", question.getNo());
+							System.out.printf("%-20s\t", question.getTitle());
+							System.out.printf("%-3s\t", question.getViewCount());
+							System.out.printf("%-3s\t", question.getStatus());
+							System.out.printf("%-10s\n", question.getType());
+						}
+						System.out.println("-------------------------------------------------");
+					}
+				} else if (qMenuNo == 2){
+					System.out.println("[답변 등록 메뉴]");
+					System.out.print("문의 글 번호를 입력하세요: ");
+					int questionNo = KeyboardUtil.nextInt();
+					System.out.print("답변글 내용을 입력하세요: ");
+					String content = KeyboardUtil.nextString();
+					service.답변등록(questionNo, content);
+				}
 			}
 			
 		} // while end

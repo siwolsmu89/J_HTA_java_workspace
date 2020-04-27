@@ -1,13 +1,17 @@
 package com.sample.bookstore.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import com.sample.bookstore.dao.AnswerDAO;
 import com.sample.bookstore.dao.BookDAO;
 import com.sample.bookstore.dao.OrderDAO;
+import com.sample.bookstore.dao.QuestionDAO;
 import com.sample.bookstore.dao.UserDAO;
+import com.sample.bookstore.vo.Answer;
 import com.sample.bookstore.vo.Book;
 import com.sample.bookstore.vo.Order;
 import com.sample.bookstore.vo.Question;
@@ -18,6 +22,8 @@ public class BookstoreService {
 	private UserDAO userDao = new UserDAO();
 	private BookDAO bookDao = new BookDAO();
 	private OrderDAO orderDao = new OrderDAO();
+	private QuestionDAO questionDao = new QuestionDAO();
+	private AnswerDAO answerDao = new AnswerDAO();
 	
 	/**
 	 * 신규 사용자 정보를 등록한다.
@@ -131,28 +137,74 @@ public class BookstoreService {
 		return orderDao.getOrderByNo(orderNo);
 	}
 	
-	public boolean 문의등록(Question question) {
-		return false;
-	}
 	
-	public void 답변등록(int questionNo, String content) {
+	public boolean registerQuestion(Question question) throws Exception {
+		Question savedQuestion = questionDao.getQuestionByNo(question.getNo());
+		if (savedQuestion != null) {
+			return false;
+		}
+		User savedUser = userDao.getUserById(question.getUser().getId());
+		if (savedUser == null) {
+			return false;
+		}
 		
+		questionDao.addQuestion(question);
+		return true;
 	}
 	
-	public List<Question> 문의글전체조회(){
+	public void 답변등록(int questionNo, String content) throws Exception {
+		Answer answer = new Answer();
+		
+		answer.setQuestionNo(questionNo);
+		answer.setContent(content);
+		
+		answerDao.addAnswer(answer);
+		
+		Question question = questionDao.getQuestionByNo(questionNo);
+		question.setAnswer(answer);
+		question.setStatus("Y");
+		
+		questionDao.updateQuestion(question);
+	}
+	
+	public List<Question> searchAllQuestions() throws SQLException{
 		List<Question> allQuestions = new ArrayList<Question>();
+		
+		allQuestions = questionDao.getAllQuestions();
 		
 		return allQuestions;
 	}
 	
-	public Question 문의글조회() {
+	public Question searchQuestionByNo(int questionNo) throws Exception {
 		Question question = null;
+		
+		question = questionDao.getQuestionByNo(questionNo);
+		
+		if (question.getStatus().equalsIgnoreCase("Y")) {
+			Answer answer = answerDao.getAnswer(questionNo);
+			question.setAnswer(answer);
+		}
+		
+		question.setViewCount(question.getViewCount()+1);
+		questionDao.updateQuestion(question);
 		
 		return question;
 	}
 	
-	public void 문의글삭제(String userId, int questionNo) {
+	public boolean deleteQuestionByNo(String userId, int questionNo) throws SQLException {
+		Question savedQuestion = questionDao.getQuestionByNo(questionNo);
+		if (savedQuestion == null) {
+			return false;
+		} else if (!savedQuestion.getUser().getId().equals(userId)) {
+			return false;
+		}
 		
+		if (savedQuestion.getStatus().equalsIgnoreCase("Y")) {
+			answerDao.removeAnswer(questionNo);
+		}
+		
+		questionDao.removeQuestion(questionNo);
+		return true;
 	}
 	
 }
