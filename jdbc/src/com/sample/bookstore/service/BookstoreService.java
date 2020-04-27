@@ -3,6 +3,8 @@ package com.sample.bookstore.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import com.sample.bookstore.dao.BookDAO;
 import com.sample.bookstore.dao.OrderDAO;
 import com.sample.bookstore.dao.UserDAO;
@@ -28,6 +30,9 @@ public class BookstoreService {
 			return false;
 		}
 		
+		// 비밀번호 암호화하기
+		String md5Password = DigestUtils.md5Hex(user.getPassword());
+		user.setPassword(md5Password);
 		userDao.addUser(user);
 		return true;
 	}
@@ -98,25 +103,31 @@ public class BookstoreService {
 		return true;
 	}
 	
-	public List<Order> searchMyOrders(String userId) throws Exception{
-		List<Order> orders = orderDao.getOrdersByUserId(userId);
-		
-		for(Order order : orders) {
-			order.setUser(userDao.getUserById(order.getUser().getId()));
-			order.setBook(bookDao.getBookByNo(order.getBook().getNo()));
-		}
-		
-		return orders;
+	/**
+	 * 지정된 사용자 아이디에 해당하는 모든 주문내역을 반환한다.
+	 * @param userId 주문내역을 조회할 사용자 아이디
+	 * @return 주문내역정보. 주문내역이 없는 경우 empty List가 반환된다.
+	 * @throws Exception
+	 */
+	public List<Order> searchMyOrders(String userId) throws Exception {
+		return orderDao.getOrdersByUserId(userId);
+		// 아래와 같이 적으면 Query문 실행횟수가 너무 많아짐 (성능저하)
+		// Query문에서 모든 정보를 받아와서 user, book을 완성하는 것이 낫다. (지금은 query에 반영함)
+		// Join이 안 되는 테이블들의 경우 어쩔 수 없이 이렇게 할 때도 있음
+//		for(Order order : orders) {
+//			order.setUser(userDao.getUserById(order.getUser().getId()));
+//			order.setBook(bookDao.getBookByNo(order.getBook().getNo()));
+//		}
 	}
 	
+	/**
+	 * 지정된 주문번호에 해당하는 주문정보를 반환한다.
+	 * @param orderNo 주문정보를 조회할 주문번호
+	 * @return 주문정보 상세내역, 주문번호가 틀린 경우 null이 반환된다.
+	 * @throws Exception
+	 */
 	public Order searchOrderByNo(int orderNo) throws Exception {
-		Order order = null;
-		
-		order = orderDao.getOrderByNo(orderNo);
-		order.setUser(userDao.getUserById(order.getUser().getId()));
-		order.setBook(bookDao.getBookByNo(order.getBook().getNo()));
-		
-		return order;
+		return orderDao.getOrderByNo(orderNo);
 	}
 	
 }

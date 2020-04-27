@@ -20,7 +20,21 @@ public class OrderDAO {
 		Book book = new Book();
 		
 		user.setId(rs.getString("user_id"));
+		user.setPassword(rs.getString("user_password"));
+		user.setName(rs.getString("user_name"));
+		user.setEmail(rs.getString("user_email"));
+		user.setPoint(rs.getInt("user_point"));
+		user.setRegisterdDate(rs.getDate("user_registered_date"));
+		
 		book.setNo(rs.getInt("book_no"));
+		book.setTitle(rs.getString("book_title"));
+		book.setWriter(rs.getString("book_writer"));
+		book.setGenre(rs.getString("book_genre"));
+		book.setPublisher(rs.getString("book_publisher"));
+		book.setPrice(rs.getInt("book_price"));
+		book.setDiscountPrice(rs.getInt("book_discount_price"));
+		book.setStock(rs.getInt("book_stock"));
+		book.setRegisteredDate(rs.getDate("book_registered_date"));
 
 		order.setOrderNo(rs.getInt("order_no"));
 		order.setUser(user);

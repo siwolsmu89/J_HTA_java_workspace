@@ -66,6 +66,7 @@ public class Bookstore {
 					System.out.println(books.size() + "권의 책이 조회되었습니다.");
 					System.out.println("-------------------------------------------------");
 					System.out.printf("%-3s\t%-25s\t%-10s\t%-15s\t%-5s\n", "번호","제목","저자","출판사","가격");
+					System.out.println("-------------------------------------------------");
 					for(Book book : books) {
 						System.out.printf("%-3s\t", book.getNo());
 						System.out.printf("%-25s\t", book.getTitle());
@@ -122,13 +123,22 @@ public class Bookstore {
 				System.out.print("주문자 아이디를 입력하세요: ");
 				String userId = KeyboardUtil.nextString();
 				
-				List<Order> orders = service.searchMyOrders(userId);
-				for(Order order : orders) {
-					System.out.println("주문번호: " + order.getOrderNo());
-					System.out.println("주 문 자: " + order.getUser().getName());
-					System.out.println("책 제 목: " + order.getBook().getTitle());
-					System.out.println("수    량: " + order.getAmount());
-					System.out.println("주문일자: " + order.getRegistredDate());
+				List<Order> myOrders = service.searchMyOrders(userId);
+				
+				if (myOrders.isEmpty()) {
+					System.out.println("!!! 주문내역이 존재하지 않습니다.");
+				} else {
+					System.out.println(myOrders.size() + "건의 주문이 조회되었습니다.");
+					System.out.println("-------------------------------------------------");
+					System.out.printf("%-3s\t%-25s\t%-3s\t%-3s\n", "주문번호","책제목","도서가격","구매수량");
+					System.out.println("-------------------------------------------------");
+					for(Order order : myOrders) {
+						System.out.printf("%-3s\t", order.getOrderNo());
+						System.out.printf("%-25s\t", order.getBook().getTitle());
+						System.out.printf("%-3s\t", order.getPrice());
+						System.out.printf("%-3s\n", order.getAmount());
+					}
+					System.out.println("-------------------------------------------------");
 				}
 				
 			} else if (menuNo == 6) {
@@ -137,13 +147,23 @@ public class Bookstore {
 				int orderNo = KeyboardUtil.nextInt();
 				
 				Order order = service.searchOrderByNo(orderNo);
-				System.out.println("주문번호: " + order.getOrderNo());
-				System.out.println("주 문 자: " + order.getUser().getName());
-				System.out.println("책 제 목: " + order.getBook().getTitle());
-				System.out.println("수    량: " + order.getAmount());
-				System.out.println("주문일자: " + order.getRegistredDate());
+				
+				if (order == null) {
+					System.out.println("!!! 해당 번호와 일치하는 정보가 없습니다.");
+					continue;
+				} else {
+					System.out.println("-------------------------------------------------");
+					System.out.println("주문번호 [" + orderNo + "] 상세 내역 조회");
+					System.out.println("-------------------------------------------------");
+					System.out.println("주문일자: " + order.getRegistredDate());
+					System.out.println("주 문 자: " + order.getUser().getName());
+					System.out.println("도 서 명: " + order.getBook().getTitle());
+					System.out.println("구매가격: " + order.getPrice());
+					System.out.println("구매수량: " + order.getAmount());
+					System.out.println("총결제액: " + order.getPrice() * order.getAmount());
+				}
+				System.out.println("-------------------------------------------------");
 			}
-		
 			
 		}
 				
