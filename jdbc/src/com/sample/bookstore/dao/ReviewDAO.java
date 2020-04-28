@@ -67,19 +67,63 @@ public class ReviewDAO {
 			myReviews.add(resultSetToReview(rs));
 		}
 		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
 		return myReviews;
 	}
 	
-	public List<Review> getAllReviews() {
-		return null;
+	public List<Review> getAllReviews() throws SQLException {
+		List<Review> allReviews = new ArrayList<Review>();
+		
+		Connection connection = ConnectionUtil.getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("review.getAllReviews"));
+		
+		ResultSet rs = pstmt.executeQuery();
+		while(rs.next()) {
+			allReviews.add(resultSetToReview(rs));
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return allReviews;
+	}
+	
+	public Review getReviewByNo(int reviewNo) throws SQLException {
+		Review review = null;
+		
+		Connection connection = ConnectionUtil.getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("review.getReviewByNo"));
+		pstmt.setInt(1, reviewNo);
+		
+		ResultSet rs = pstmt.executeQuery();
+		if(rs.next()) {
+			review = resultSetToReview(rs);
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return review;
 	}
 	
 	public boolean updateReview() {
 		return false;
 	}
 	
-	public boolean removeReview(Review review) {
-		return false;
+	public void removeReview(Review review) throws SQLException {
+		Connection connection = ConnectionUtil.getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("review.removeReview"));
+		pstmt.setInt(1, review.getNo());
+		
+		pstmt.executeUpdate();
+		
+		pstmt.close();
+		connection.close();
 	}
 	
 }

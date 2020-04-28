@@ -385,16 +385,61 @@ public class Bookstore {
 					
 				} else if (commMenuNo == 5) {
 					System.out.println("리뷰삭제");
+					System.out.print("사용자 아이디를 입력하세요: ");
+					String userId = KeyboardUtil.nextString();
+					System.out.print("책 번호를 입력하세요: ");
+					int bookNo = KeyboardUtil.nextInt();
 					
-					service.removeReview();
+					Review review = new Review();
+					Book book = new Book();
+					User user = new User();
+					book.setNo(bookNo);
+					user.setId(userId);
+					review.setBook(book);
+					review.setUser(user);
+					
+					boolean isSuccess = service.removeReview(review);
+					if (isSuccess) {
+						System.out.println("### 리뷰삭제가 완료되었습니다.");
+					} else {
+						System.out.println("!!! 리뷰삭제 도중 오류가 발생했습니다.");
+					}
 				} else if (commMenuNo == 6) {
 					System.out.println("전체리뷰목록");
 					
-					//service.searchAllReviews();
+					List<Review> allReviews = service.searchAllReviews();
+					
+					if(allReviews.isEmpty()) {
+						System.out.println("!!! 등록된 리뷰가 없습니다.");
+					} else {
+						System.out.println("등록된 리뷰 조회");
+						System.out.println("리뷰번호\t책번호\t작성자\t평점\t내용");
+						for (Review rev : allReviews) {
+							System.out.println(rev.getNo() + "\t");
+							System.out.print(rev.getBook().getNo()+"\t");
+							System.out.print(rev.getUser().getId()+"\t");
+							System.out.print(rev.getPoint()+"\t");
+							System.out.print(rev.getContent()+"\n");
+						}
+					}
+					System.out.println("-------------------------------------------------");
+
 				} else if (commMenuNo == 7) {
 					System.out.println("리뷰상세보기");
+					System.out.print("리뷰번호를 입력하세요: ");
+					int reviewNo = KeyboardUtil.nextInt();
 					
-					//service.searchReviewByNo();
+					Review review = service.searchReviewByNo(reviewNo);
+					if (review == null) {
+						System.out.println("!!! 리뷰를 조회하던 중 오류가 발생했습니다.");
+					} else {
+						System.out.println("리뷰번호 : " + review.getNo());
+						System.out.println("도 서  명 : " + review.getBook().getTitle());
+						System.out.println("작 성  자 : " + review.getUser().getId());
+						System.out.println("평      점 : " + review.getPoint());
+						System.out.println("리뷰내용 : " + review.getContent());
+						System.out.println("등록날짜 : " + review.getRegisteredDate());
+					}
 				}
 			}
 			
