@@ -191,6 +191,49 @@ public class BookDAO {
 
 		return books;
 	}
+	
+	public List<Book> getBooksWithLikes() throws Exception {
+		List<Book> books = new ArrayList<Book>();
+
+		String sql = "SELECT * " 
+				+ "FROM sample_books " 
+				+ "WHERE book_likes > 0 "
+				+ "ORDER BY book_likes DESC";
+
+		Connection connection = ConnectionUtil.getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+
+		ResultSet rs = pstmt.executeQuery();
+		books = resultSetToBookList(rs);
+
+		rs.close();
+		pstmt.close();
+		connection.close();
+
+		return books;
+	} 
+	
+	public List<Book> getBooksWithReviews() throws Exception {
+		List<Book> books = new ArrayList<Book>();
+
+		String sql = "SELECT * " 
+				+ "FROM sample_books B, sample_book_review R " 
+				+ "WHERE B.book_no = R.book_no "
+				+ "	AND R.book_review > 0 "
+				+ "ORDER BY book_reviews DESC";
+
+		Connection connection = ConnectionUtil.getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+
+		ResultSet rs = pstmt.executeQuery();
+		books = resultSetToBookList(rs);
+
+		rs.close();
+		pstmt.close();
+		connection.close();
+
+		return books;
+	} 
 
 	/**
 	 * 지정된 책 번호에 해당하는 책 정보를 데이터베이스에서 삭제한다.

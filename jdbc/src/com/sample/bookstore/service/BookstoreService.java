@@ -340,4 +340,12 @@ public class BookstoreService {
 		return reviewDao.getReviewByNo(reviewNo);
 	}
 	
+	public List<Book> searchBooksWithLikes() throws Exception {
+		return bookDao.getBooksWithLikes();
+	}
+	
+	public List<Book> searchBooksWithReviews() throws Exception {
+		return bookDao.getBooksWithReviews();
+	}
+	
 }

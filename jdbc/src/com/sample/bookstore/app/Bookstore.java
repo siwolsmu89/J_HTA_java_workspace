@@ -57,31 +57,79 @@ public class Bookstore {
 				} else {
 					System.out.println("!!! 이미 사용중인 아이디입니다.");
 				}
-				
 			} else if (menuNo == 2) {
-				System.out.println("[책 검색하기]");
-				System.out.print("검색어를 입력하세요: ");
-				String keyword = KeyboardUtil.nextString();
-				
-				List<Book> books = service.searchBooksByKeyword(keyword);
-				
-				if (books.isEmpty()) {
-					System.out.println("!!! 검색결과가 존재하지 않습니다.");
-				} else {
-					System.out.println(books.size() + "권의 책이 조회되었습니다.");
-					System.out.println("-------------------------------------------------");
-					System.out.printf("%-3s\t%-25s\t%-10s\t%-15s\t%-5s\n", "번호","제목","저자","출판사","가격");
-					System.out.println("-------------------------------------------------");
-					for(Book book : books) {
-						System.out.printf("%-3s\t", book.getNo());
-						System.out.printf("%-25s\t", book.getTitle());
-						System.out.printf("%-10s\t", book.getWriter());
-						System.out.printf("%-15s\t", book.getPublisher());
-						System.out.printf("%-5s\n", book.getPrice());
+				System.out.println("[도서 조회하기]");
+				System.out.println("-------------------------------------------------");
+				System.out.println("1.검색어  2.추천도서  3.화제도서");
+				System.out.println("-------------------------------------------------");
+				System.out.print("정렬 방식을 선택하세요: ");
+				int searchMenuNo = KeyboardUtil.nextInt();
+				if (searchMenuNo == 1) {
+					System.out.println("[검색어로 도서 조회하기]");
+					System.out.print("검색어를 입력하세요: ");
+					String keyword = KeyboardUtil.nextString();
+					
+					List<Book> books = service.searchBooksByKeyword(keyword);
+					
+					if (books.isEmpty()) {
+						System.out.println("!!! 검색결과가 존재하지 않습니다.");
+					} else {
+						System.out.println(books.size() + "권의 책이 조회되었습니다.");
+						System.out.println("-------------------------------------------------");
+						System.out.printf("%-3s\t%-25s\t%-10s\t%-15s\t%-5s\n", "번호","제목","저자","출판사","가격");
+						System.out.println("-------------------------------------------------");
+						for(Book book : books) {
+							System.out.printf("%-3s\t", book.getNo());
+							System.out.printf("%-25s\t", book.getTitle());
+							System.out.printf("%-10s\t", book.getWriter());
+							System.out.printf("%-15s\t", book.getPublisher());
+							System.out.printf("%-5s\n", book.getPrice());
+						}
+						System.out.println("-------------------------------------------------");
 					}
-					System.out.println("-------------------------------------------------");
+				} else if (searchMenuNo == 2) {
+					System.out.println("[추천도서 조회하기]");
+					
+					List<Book> books = service.searchBooksWithLikes();
+					
+					if (books.isEmpty()) {
+						System.out.println("!!! 검색결과가 존재하지 않습니다.");
+					} else {
+						System.out.println(books.size() + "권의 책이 조회되었습니다.");
+						System.out.println("-------------------------------------------------");
+						System.out.printf("%-3s\t%-25s\t%-10s\t%-15s\t%-5s\n", "번호","제목","저자","출판사","가격");
+						System.out.println("-------------------------------------------------");
+						for(Book book : books) {
+							System.out.printf("%-3s\t", book.getNo());
+							System.out.printf("%-25s\t", book.getTitle());
+							System.out.printf("%-10s\t", book.getWriter());
+							System.out.printf("%-15s\t", book.getPublisher());
+							System.out.printf("%-5s\n", book.getPrice());
+						}
+						System.out.println("-------------------------------------------------");
+					}
+				} else if (searchMenuNo == 3) {
+					System.out.println("[화제의 도서 조회하기]");
+					
+					List<Book> books = service.searchBooksWithReviews();
+					
+					if (books.isEmpty()) {
+						System.out.println("!!! 검색결과가 존재하지 않습니다.");
+					} else {
+						System.out.println(books.size() + "권의 책이 조회되었습니다.");
+						System.out.println("-------------------------------------------------");
+						System.out.printf("%-3s\t%-25s\t%-10s\t%-15s\t%-5s\n", "번호","제목","저자","출판사","가격");
+						System.out.println("-------------------------------------------------");
+						for(Book book : books) {
+							System.out.printf("%-3s\t", book.getNo());
+							System.out.printf("%-25s\t", book.getTitle());
+							System.out.printf("%-10s\t", book.getWriter());
+							System.out.printf("%-15s\t", book.getPublisher());
+							System.out.printf("%-5s\n", book.getPrice());
+						}
+						System.out.println("-------------------------------------------------");
+					}
 				}
-				
 			} else if (menuNo == 3) {
 				System.out.println("[책 정보 상세 조회]");
 				System.out.print("조회할 책 번호를 입력하세요: ");
@@ -104,7 +152,6 @@ public class Bookstore {
 					System.out.println("등록일자: " + book.getRegisteredDate());
 					System.out.println("-------------------------------------------------");
 				}
-				
 			} else if (menuNo == 4) {
 				System.out.println("[주문하기]");
 				
@@ -122,7 +169,6 @@ public class Bookstore {
 				} else {
 					System.out.println("!!! 주문처리 중 오류가 발생하였습니다.");
 				}
-				
 			} else if (menuNo == 5) {
 				System.out.println("[내 주문 전부 보기]");
 				System.out.print("주문자 아이디를 입력하세요: ");
@@ -145,7 +191,6 @@ public class Bookstore {
 					}
 					System.out.println("-------------------------------------------------");
 				}
-				
 			} else if (menuNo == 6) {
 				System.out.println("[주문 정보 보기]");
 				System.out.print("조회할 주문 번호를 입력하세요: ");
@@ -194,7 +239,6 @@ public class Bookstore {
 						}
 						System.out.println("-------------------------------------------------");
 					}
-					
 				} else if (qMenuNo == 2) {
 					System.out.println("[문의 글 등록]");
 					System.out.print("아이디를 입력하세요: ");
@@ -234,7 +278,6 @@ public class Bookstore {
 						System.out.println("!!! 문의 등록 도중 오류가 발생했습니다.");
 					}
 					System.out.println("-------------------------------------------------");
-					
 				} else if (qMenuNo == 3) {
 					System.out.println("[문의 글 상세조회]");
 					System.out.print("질문 글 번호를 입력하세요: ");
@@ -264,7 +307,6 @@ public class Bookstore {
 						}
 					}
 					System.out.println("-------------------------------------------------");
-					
 				} else if (qMenuNo == 4) {
 					System.out.println("[문의 글 삭제]");
 					System.out.print("질문 글 번호를 입력하세요: ");
@@ -282,7 +324,6 @@ public class Bookstore {
 				
 					System.out.println("-------------------------------------------------");
 				}
-				
 			} else if (menuNo == 8) {
 				System.out.println("[커뮤니티]");
 				System.out.println("-------------------------------------------------");
@@ -314,7 +355,6 @@ public class Bookstore {
 					} else {
 						System.out.println("!!! 추천 등록 과정에서 오류가 발생했습니다.");
 					}
-					
 				} else if (commMenuNo == 2) {
 					System.out.println("추천취소");
 					System.out.print("아이디를 입력하세요: ");
@@ -382,7 +422,6 @@ public class Bookstore {
 					} else {
 						System.out.println("!!! 리뷰 등록 과정에서 오류가 발생했습니다.");
 					}
-					
 				} else if (commMenuNo == 5) {
 					System.out.println("리뷰삭제");
 					System.out.print("사용자 아이디를 입력하세요: ");
@@ -423,7 +462,6 @@ public class Bookstore {
 						}
 					}
 					System.out.println("-------------------------------------------------");
-
 				} else if (commMenuNo == 7) {
 					System.out.println("리뷰상세보기");
 					System.out.print("리뷰번호를 입력하세요: ");
@@ -441,9 +479,7 @@ public class Bookstore {
 						System.out.println("등록날짜 : " + review.getRegisteredDate());
 					}
 				}
-			}
-			
-		}
-				
-	}
-}
+			} // menuNo 8 end
+		} // while end
+	} // main end
+} // class end
