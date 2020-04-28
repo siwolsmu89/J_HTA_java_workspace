@@ -42,7 +42,7 @@ public class QuestionDAO {
 		pstmt.setString(4, question.getType());
 		
 		pstmt.executeUpdate();
-		
+				
 		pstmt.close();
 		connection.close();
 		

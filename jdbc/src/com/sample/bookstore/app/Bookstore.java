@@ -6,8 +6,10 @@ import com.sample.bookstore.service.BookstoreService;
 import com.sample.bookstore.util.KeyboardUtil;
 import com.sample.bookstore.vo.Answer;
 import com.sample.bookstore.vo.Book;
+import com.sample.bookstore.vo.Like;
 import com.sample.bookstore.vo.Order;
 import com.sample.bookstore.vo.Question;
+import com.sample.bookstore.vo.Review;
 import com.sample.bookstore.vo.User;
 
 public class Bookstore {
@@ -18,9 +20,9 @@ public class Bookstore {
 		
 		while(true) {
 			System.out.println("-------------------------------------------------");
-			System.out.println("1.회원가입  2.검색하기    3.책정보조회");
-			System.out.println("4.주문하기  5.내주문조회  6.주문정보조회");
-			System.out.println("7.문의게시판               0.종료");
+			System.out.println("1.회원가입    2.검색하기    3.책정보조회");
+			System.out.println("4.주문하기    5.내주문조회  6.주문정보조회");
+			System.out.println("7.문의게시판  8.커뮤니티    0.종료");
 			System.out.println("-------------------------------------------------");
 			
 			System.out.print("메뉴를 선택하세요: ");
@@ -281,6 +283,119 @@ public class Bookstore {
 					System.out.println("-------------------------------------------------");
 				}
 				
+			} else if (menuNo == 8) {
+				System.out.println("[커뮤니티]");
+				System.out.println("-------------------------------------------------");
+				System.out.println("1.추천하기    2.추천삭제    3.내추천보기");
+				System.out.println("4.리뷰쓰기    5.리뷰삭제    6.전체리뷰목록    7.리뷰읽기");
+				System.out.println("-------------------------------------------------");
+				System.out.print("커뮤니티 메뉴를 선택하세요: ");
+				int commMenuNo = KeyboardUtil.nextInt();
+				
+				if (commMenuNo == 1) {
+					System.out.println("추천하기");
+					System.out.print("ID를 입력하세요: ");
+					String userId = KeyboardUtil.nextString();
+					System.out.print("책 번호를 입력하세요: ");
+					int bookNo = KeyboardUtil.nextInt();
+					
+					Like like = new Like();
+					User user = new User();
+					user.setId(userId);
+					like.setUser(user);
+
+					Book book = new Book();
+					book.setNo(bookNo);
+					like.setBook(book);
+					
+					boolean isSuccess = service.addLike(like);
+					if (isSuccess) {
+						System.out.println("### 추천이 등록되었습니다.");
+					} else {
+						System.out.println("!!! 추천 등록 과정에서 오류가 발생했습니다.");
+					}
+					
+				} else if (commMenuNo == 2) {
+					System.out.println("추천취소");
+					System.out.print("아이디를 입력하세요: ");
+					String userId = KeyboardUtil.nextString();
+					System.out.print("삭제하려는 책번호를 입력하세요: ");
+					int bookNo = KeyboardUtil.nextInt();
+					
+					User user = new User();
+					user.setId(userId);
+					Book book = new Book();
+					book.setNo(bookNo);
+					
+					Like like = new Like();
+					like.setUser(user);
+					like.setBook(book);
+					
+					boolean isSuccess = service.removeLike(like);
+					if(isSuccess) {
+						System.out.println("### 추천 삭제가 완료되었습니다.");
+					} else {
+						System.out.println("!!! 추천 삭제 과정에서 오류가 발생했습니다.");
+					}
+				} else if (commMenuNo == 3) {
+					System.out.println("내추천보기");
+					System.out.print("아이디를 입력하세요: ");
+					String userId = KeyboardUtil.nextString();
+					
+					List<Like> myLikes = service.searchMyLikes(userId);
+					if(myLikes.isEmpty()) {
+						System.out.println("!!! 해당 아이디로 등록된 추천이 없습니다");
+					} else {
+						System.out.printf("%-3s\t%-23s\t%-3s\n", "책번호","책제목","추천수");
+						System.out.println("-------------------------------------------------");
+						for (Like like : myLikes) {
+							System.out.printf("%-3s\t", like.getBook().getNo());
+							System.out.printf("%-23s\t", like.getBook().getTitle());
+							System.out.printf("%-3s\n", like.getBook().getLike());
+						}
+					}
+				} else if (commMenuNo == 4) {
+					System.out.println("리뷰쓰기");
+					System.out.print("아이디를 입력하세요: ");
+					String userId = KeyboardUtil.nextString();
+					System.out.print("책번호를 입력하세요: ");
+					int bookNo = KeyboardUtil.nextInt();
+					System.out.print("내용을 입력하세요: ");
+					String content = KeyboardUtil.nextString();
+					System.out.print("평점을 입력하세요: ");
+					double point = KeyboardUtil.nextDouble();
+					
+					User user = new User();
+					user.setId(userId);
+					Book book = new Book();
+					book.setNo(bookNo);
+					
+					Review review = new Review();
+					review.setUser(user);
+					review.setBook(book);
+					review.setPoint(point);
+					review.setContent(content);
+					
+					boolean isSuccess = service.addReview(review);
+					if (isSuccess) {
+						System.out.println("### 리뷰가 성공적으로 등록되었습니다.");
+					} else {
+						System.out.println("!!! 리뷰 등록 과정에서 오류가 발생했습니다.");
+					}
+					
+				} else if (commMenuNo == 5) {
+					System.out.println("리뷰삭제");
+					
+					service.removeReview();
+				} else if (commMenuNo == 6) {
+					System.out.println("전체리뷰목록");
+					
+					//service.searchAllReviews();
+				} else if (commMenuNo == 7) {
+					System.out.println("리뷰상세보기");
+					
+					//service.searchReviewByNo();
+				}
 			}
 			
 		}

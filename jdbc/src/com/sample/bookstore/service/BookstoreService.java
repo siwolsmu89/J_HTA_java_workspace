@@ -8,13 +8,17 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import com.sample.bookstore.dao.AnswerDAO;
 import com.sample.bookstore.dao.BookDAO;
+import com.sample.bookstore.dao.LikeDAO;
 import com.sample.bookstore.dao.OrderDAO;
 import com.sample.bookstore.dao.QuestionDAO;
+import com.sample.bookstore.dao.ReviewDAO;
 import com.sample.bookstore.dao.UserDAO;
 import com.sample.bookstore.vo.Answer;
 import com.sample.bookstore.vo.Book;
+import com.sample.bookstore.vo.Like;
 import com.sample.bookstore.vo.Order;
 import com.sample.bookstore.vo.Question;
+import com.sample.bookstore.vo.Review;
 import com.sample.bookstore.vo.User;
 
 public class BookstoreService {
@@ -24,6 +28,8 @@ public class BookstoreService {
 	private OrderDAO orderDao = new OrderDAO();
 	private QuestionDAO questionDao = new QuestionDAO();
 	private AnswerDAO answerDao = new AnswerDAO();
+	private LikeDAO likeDao = new LikeDAO();
+	private ReviewDAO reviewDao = new ReviewDAO();
 	
 	/**
 	 * 신규 사용자 정보를 등록한다.
@@ -204,6 +210,125 @@ public class BookstoreService {
 		}
 		
 		questionDao.removeQuestion(questionNo);
+		return true;
+	}
+	
+	public boolean addLike(Like like) throws Exception {
+		Book savedBook = bookDao.getBookByNo(like.getBook().getNo());
+		User savedUser = userDao.getUserById(like.getUser().getId());
+		List<Like> mySavedLikes = likeDao.getMyLikes(like.getUser().getId());
+		if (savedBook == null) {
+			return false;
+		}
+		if (savedUser == null) {
+			return false;
+		}
+		if (mySavedLikes.contains(like)) {
+			return false;
+		}
+		
+		likeDao.addLike(like);
+
+		savedBook.setLike(savedBook.getLike() + 1);
+		bookDao.updateBook(savedBook);
+		
+		return true;
+	}
+	
+	public List<Like> searchMyLikes(String userId) throws Exception {
+		List<Like> myLikes = null;
+		User savedUser = userDao.getUserById(userId);
+		if (savedUser != null) {
+			myLikes = likeDao.getMyLikes(userId);
+		}
+		
+		for (Like like : myLikes) {
+			int bookNo = like.getBook().getNo();
+			Book book = bookDao.getBookByNo(bookNo);
+			like.setBook(book);
+			like.setUser(savedUser);
+		}
+		
+		return myLikes;
+	}
+	
+	public boolean removeLike(Like like) throws Exception {
+		User savedUser = userDao.getUserById(like.getUser().getId());
+		if (savedUser == null) {
+			return false;
+		}
+		
+		Book savedBook = bookDao.getBookByNo(like.getBook().getNo());
+		if (savedBook == null) {
+			return false;
+		}
+		
+		boolean isRegistered = false;
+		List<Like> myLikes = likeDao.getMyLikes(like.getUser().getId());
+		for (Like lk : myLikes) {
+			if (lk.getBook().getNo() == like.getBook().getNo()) {
+				isRegistered = true;
+			}
+		}
+		if(!isRegistered) {
+			return false;
+		}
+		
+		savedBook.setLike(savedBook.getLike()-1);
+		bookDao.updateBook(savedBook);
+
+		likeDao.removeLike(like);
+		return true;
+	}
+	
+	public boolean addReview(Review review) throws Exception {
+		User savedUser = userDao.getUserById(review.getUser().getId());
+		if(savedUser == null) {
+			return false;
+		}
+		Book savedBook = bookDao.getBookByNo(review.getBook().getNo());
+		if (savedBook == null) {
+			return false;
+		}
+		
+		List<Review> myReviews = reviewDao.getMyReviews(savedUser.getId());
+		if (!myReviews.isEmpty()) {
+			for (Review rev : myReviews) {
+				Book book = rev.getBook();
+				if (book.getNo() == savedBook.getNo()) {
+					return false;
+				}
+			}
+		}
+		
+		reviewDao.addReview(review);
+		bookDao.updateBook(savedBook);
+		return true;
+	}
+	
+	public boolean removeReview(Review review) throws Exception {
+		User savedUser = userDao.getUserById(review.getUser().getId());
+		if (savedUser == null) {
+			return false;
+		}
+		
+		Book savedBook = bookDao.getBookByNo(review.getBook().getNo());
+		if (savedBook == null) {
+			return false;
+		}
+		
+		boolean isRegistered = false;
+		List<Review> myReviews = reviewDao.getMyReviews(review.getUser().getId());
+		for (Review lk : myReviews) {
+			if (lk.getBook().getNo() == review.getBook().getNo()) {
+				isRegistered = true;
+			}
+		}
+		if(!isRegistered) {
+			return false;
+		}
+		reviewDao.removeReview(review);
+		bookDao.updateBook(savedBook);
 		return true;
 	}
 	

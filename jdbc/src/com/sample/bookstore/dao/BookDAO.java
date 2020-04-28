@@ -30,6 +30,8 @@ public class BookDAO {
 		book.setPrice(rs.getInt("book_discount_price"));
 		book.setRegisteredDate(rs.getDate("book_registered_date"));
 		book.setStock(rs.getInt("book_stock"));
+		book.setLike(rs.getInt("book_likes"));
+		book.setPoint(rs.getDouble("book_point"));
 
 		return book;
 	}
@@ -217,7 +219,6 @@ public class BookDAO {
 	public void updateBook(Book book) throws Exception {
 		Connection connection = ConnectionUtil.getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("book.updateBook"));
-		
 		pstmt.setString(1, book.getTitle());
 		pstmt.setString(2, book.getWriter());
 		pstmt.setString(3, book.getGenre());
@@ -225,7 +226,9 @@ public class BookDAO {
 		pstmt.setInt(5, book.getPrice());
 		pstmt.setInt(6, book.getDiscountPrice());
 		pstmt.setInt(7, book.getStock());
-		pstmt.setInt(8, book.getNo());
+		pstmt.setInt(8,  book.getLike());
+		pstmt.setInt(9, book.getNo());
+		pstmt.setInt(10, book.getNo());
 		
 		pstmt.execute();
 		

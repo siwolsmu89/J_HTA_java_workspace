@@ -13,6 +13,8 @@ public class Book {
 	private int discountPrice;
 	private int stock;
 	private Date registeredDate;
+	private int like;
+	private double point;
 	
 	public Book() {
 		
@@ -73,6 +75,22 @@ public class Book {
 	
 	public void setStock(int stock) {
 		this.stock = stock;
+	}
+	
+	public int getLike() {
+		return like;
+	}
+	
+	public void setLike(int like) {
+		this.like = like;
+	}
+	
+	public double getPoint() {
+		return point;
+	}
+	
+	public void setPoint(double point) {
+		this.point = point;
 	}
 	
 }
