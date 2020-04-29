@@ -117,6 +117,8 @@ public class Bookstore {
 					if (books.isEmpty()) {
 						System.out.println("!!! 검색결과가 존재하지 않습니다.");
 					} else {
+						// 리뷰 수를 넣고싶은데 어떻게 해야하지?
+						// Map으로 book별 추천수를 넘겨야되나
 						System.out.println(books.size() + "권의 책이 조회되었습니다.");
 						System.out.println("-------------------------------------------------");
 						System.out.printf("%-3s\t%-25s\t%-10s\t%-15s\t%-5s\n", "번호","제목","저자","출판사","가격");
@@ -150,6 +152,7 @@ public class Bookstore {
 					System.out.println("가    격: " + book.getPrice());
 					System.out.println("할인가격: " + book.getDiscountPrice());
 					System.out.println("재    고: " + book.getStock());
+					System.out.println("추 천 수: " + book.getLike());
 					System.out.println("등록일자: " + book.getRegisteredDate());
 					System.out.println("-------------------------------------------------");
 				}
