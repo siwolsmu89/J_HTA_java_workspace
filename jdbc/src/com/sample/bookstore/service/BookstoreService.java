@@ -332,12 +332,17 @@ public class BookstoreService {
 		return true;
 	}
 	
-	public List<Review> searchAllReviews() throws SQLException {
+	public List<Review> searchAllReviews() throws Exception {
 		return reviewDao.getAllReviews();
 	}
 	
-	public Review searchReviewByNo(int reviewNo) throws SQLException {
-		return reviewDao.getReviewByNo(reviewNo);
+	public Review searchReviewByNo(int reviewNo) throws Exception {
+		Review review = reviewDao.getReviewByNo(reviewNo);
+		
+		Book book = bookDao.getBookByNo(review.getBook().getNo());
+		review.setBook(book);
+		
+		return review;
 	}
 	
 	public List<Book> searchBooksWithLikes() throws Exception {

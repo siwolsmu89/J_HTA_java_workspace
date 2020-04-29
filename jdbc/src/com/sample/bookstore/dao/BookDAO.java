@@ -216,18 +216,19 @@ public class BookDAO {
 	public List<Book> getBooksWithReviews() throws Exception {
 		List<Book> books = new ArrayList<Book>();
 
-		String sql = "SELECT * " 
-				+ "FROM sample_books B, sample_book_review R " 
-				+ "WHERE B.book_no = R.book_no "
-				+ "	AND R.book_review > 0 "
-				+ "ORDER BY book_reviews DESC";
-
+		String sql = "SELECT DISTINCT * " + 
+				"FROM sample_books B, (SELECT B.book_no, count(R.review_no) AS review_count " + 
+				"                      FROM sample_books B, sample_book_reviews R " + 
+				"                      WHERE B.book_no = R.book_no " + 
+				"                      GROUP BY B.book_no) C " + 
+				"WHERE B.book_no = C.book_no " +
+				"ORDER BY review_count";
 		Connection connection = ConnectionUtil.getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 
 		ResultSet rs = pstmt.executeQuery();
 		books = resultSetToBookList(rs);
-
+		
 		rs.close();
 		pstmt.close();
 		connection.close();

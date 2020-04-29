@@ -20,7 +20,7 @@ public class Bookstore {
 		
 		while(true) {
 			System.out.println("-------------------------------------------------");
-			System.out.println("1.회원가입    2.검색하기    3.책정보조회");
+			System.out.println("1.회원가입    2.책목록조회  3.도서상세조회");
 			System.out.println("4.주문하기    5.내주문조회  6.주문정보조회");
 			System.out.println("7.문의게시판  8.커뮤니티    0.종료");
 			System.out.println("-------------------------------------------------");
@@ -97,9 +97,10 @@ public class Bookstore {
 					} else {
 						System.out.println(books.size() + "권의 책이 조회되었습니다.");
 						System.out.println("-------------------------------------------------");
-						System.out.printf("%-3s\t%-25s\t%-10s\t%-15s\t%-5s\n", "번호","제목","저자","출판사","가격");
+						System.out.printf("%-3s\t%-3s\t%-25s\t%-10s\t%-15s\t%-5s\n", "추천수", "번호","제목","저자","출판사","가격");
 						System.out.println("-------------------------------------------------");
 						for(Book book : books) {
+							System.out.printf("%-3s\t", book.getLike());
 							System.out.printf("%-3s\t", book.getNo());
 							System.out.printf("%-25s\t", book.getTitle());
 							System.out.printf("%-10s\t", book.getWriter());
@@ -454,7 +455,7 @@ public class Bookstore {
 						System.out.println("등록된 리뷰 조회");
 						System.out.println("리뷰번호\t책번호\t작성자\t평점\t내용");
 						for (Review rev : allReviews) {
-							System.out.println(rev.getNo() + "\t");
+							System.out.print(rev.getNo() + "\t");
 							System.out.print(rev.getBook().getNo()+"\t");
 							System.out.print(rev.getUser().getId()+"\t");
 							System.out.print(rev.getPoint()+"\t");
@@ -472,9 +473,10 @@ public class Bookstore {
 						System.out.println("!!! 리뷰를 조회하던 중 오류가 발생했습니다.");
 					} else {
 						System.out.println("리뷰번호 : " + review.getNo());
-						System.out.println("도 서  명 : " + review.getBook().getTitle());
-						System.out.println("작 성  자 : " + review.getUser().getId());
-						System.out.println("평      점 : " + review.getPoint());
+						System.out.println("도서번호 : " + review.getBook().getNo());
+						System.out.println("도 서 명 : " + review.getBook().getTitle());
+						System.out.println("작 성 자 : " + review.getUser().getId());
+						System.out.println("평    점 : " + review.getPoint());
 						System.out.println("리뷰내용 : " + review.getContent());
 						System.out.println("등록날짜 : " + review.getRegisteredDate());
 					}
