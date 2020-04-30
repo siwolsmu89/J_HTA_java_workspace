@@ -11,7 +11,7 @@ public class QueryUtil {
 	
 	static {
 		try {
-			prop.load(new FileInputStream("src/com/sample/bookstore/dao/query.properties"));
+			prop.load(new FileInputStream("src/com/sample/school/dao/query.properties"));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
