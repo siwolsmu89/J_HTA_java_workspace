@@ -2,7 +2,7 @@ package com.sample.school.app;
 
 import java.util.List;
 
-import com.sample.school.service.ProfessorService;
+import com.sample.school.service.SchoolService;
 import com.sample.school.util.KeyboardUtil;
 import com.sample.school.vo.Course;
 import com.sample.school.vo.Dept;
@@ -12,7 +12,7 @@ import com.sample.school.vo.Subject;
 public class SchoolApp {
 	
 	public static void main(String[] args) throws Exception {
-		ProfessorService service = new ProfessorService();
+		SchoolService service = new SchoolService();
 		
 		while(true) {
 			System.out.println("학사관리 프로그램");

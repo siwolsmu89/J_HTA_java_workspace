@@ -11,9 +11,10 @@ import com.sample.school.dao.SubjectDAO;
 import com.sample.school.vo.Course;
 import com.sample.school.vo.Dept;
 import com.sample.school.vo.Prof;
+import com.sample.school.vo.Reg;
 import com.sample.school.vo.Subject;
 
-public class ProfessorService {
+public class SchoolService {
 	
 	private SubjectDAO subjectDao = new SubjectDAO();
 	private CourseDAO courseDao = new CourseDAO();
@@ -95,9 +96,22 @@ public class ProfessorService {
 	public Course getCourseByNo(int courseNo) throws SQLException {
 		Course course = courseDao.getCourseByNo(courseNo);
 		
-		course.setDept(deptDao.getDeptByNo(course.getDept().getNo()));
-		course.setProf(profDao.getProfByNo(course.getProf().getNo()));
-		course.setSubject(subjectDao.getSubjectByNo(course.getSubject().getNo()));
+		if (course == null) {
+			return course;
+		}
+		
+		if (course.getDept() != null) {
+			Dept dept = deptDao.getDeptByNo(course.getDept().getNo());
+			course.setDept(dept);
+		}
+		if (course.getProf() != null) {
+			Prof prof = profDao.getProfByNo(course.getProf().getNo());
+			course.setProf(prof);
+		}
+		if (course.getSubject() != null) {
+			Subject subject = subjectDao.getSubjectByNo(course.getSubject().getNo());
+			course.setSubject(subject);
+		}
 		
 		return course;
 	}
@@ -113,4 +127,20 @@ public class ProfessorService {
 		
 		return allCourses;
 	}
+	
+	public boolean addReg(Reg reg) {
+		return true;
+	}
+	
+	public boolean cancelReg(Reg reg) {
+		return true;
+	}
+	
+	public List<Reg> getMyRegs(int studentNo) {
+		List<Reg> myRegs = new ArrayList<Reg>();
+		
+		return myRegs;
+	}
+	
+	
 }
