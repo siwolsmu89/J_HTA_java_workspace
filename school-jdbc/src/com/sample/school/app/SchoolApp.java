@@ -7,6 +7,8 @@ import com.sample.school.util.KeyboardUtil;
 import com.sample.school.vo.Course;
 import com.sample.school.vo.Dept;
 import com.sample.school.vo.Prof;
+import com.sample.school.vo.Reg;
+import com.sample.school.vo.Student;
 import com.sample.school.vo.Subject;
 
 public class SchoolApp {
@@ -159,8 +161,98 @@ public class SchoolApp {
 			} else if (menuNo == 2) {
 				System.out.println("학사관리 프로그램(학생용)");
 				System.out.println("----------------------------------------");
+				System.out.println("1.학과과정조회   2.수강신청");
+				System.out.println("3.신청내역조회   4.신청취소");
+				System.out.println("----------------------------------------");
 				System.out.print("메뉴를 선택하세요: ");
 				int studentMenuNo = KeyboardUtil.nextInt();
+				
+				if (studentMenuNo == 1) { 
+					System.out.println("학과과정조회");
+					System.out.print("학과번호를 입력하세요: ");
+					int deptNo = KeyboardUtil.nextInt();
+					
+					List<Course> deptCourses = service.getCoursesByDeptNo(deptNo);
+					
+					if (deptCourses.isEmpty()) {
+						System.out.println("!!! 학과과정 조회 과정에서 오류가 발생했습니다.");
+					} else {
+						System.out.println("### 학과과정 조회 결과");
+						System.out.println("과정번호\t과정명\t담당교수\t잔여인원\t마감여부");
+						for (Course course : deptCourses) {
+							String registerable = "마감전";
+							if (!course.isRegisterable()) {
+								registerable = "마감완료";
+							}
+							System.out.print(course.getNo() + "\t");
+							System.out.print(course.getTitle() + "\t");
+							System.out.print(course.getProf().getName() + "\t");
+							System.out.print(course.getStudentCount() + "\t");
+							System.out.print(registerable + "\n");
+						}
+					}
+					
+				} else if (studentMenuNo == 2) {
+					System.out.println("수강신청");
+					System.out.print("과정번호를 입력하세요: ");
+					int courseNo = KeyboardUtil.nextInt();
+					System.out.print("학번을 입력하세요: ");
+					int studentNo = KeyboardUtil.nextInt();
+					
+					Course course = new Course();
+					course.setNo(courseNo);
+					Student student = new Student();
+					student.setNo(studentNo);
+					Reg reg = new Reg();
+					reg.setCourse(course);
+					reg.setStudent(student);
+					
+					boolean isSuccess = service.addReg(reg);
+					if (isSuccess) {
+						System.out.println("### 수강신청이 정상적으로 완료되었습니다.");
+					} else {
+						System.out.println("!!! 수강신청 과정에서 오류가 발생했습니다.");
+					}
+					
+				} else if (studentMenuNo == 3) {
+					System.out.println("신청내역조회");
+					System.out.print("학번을 입력하세요: ");
+					int studentNo = KeyboardUtil.nextInt();
+					
+					List<Reg> myRegs = service.getMyRegs(studentNo);
+					
+					if (myRegs.isEmpty()) {
+						System.out.println("!!! 신청내역 조회 중 오류가 발생했습니다.");
+					} else {
+						System.out.println("### 신청내역 조회 결과");
+						System.out.println("신청번호\t과정명\t담당교수명\t신청상태\t수료여부\t점수\t신청일");
+						for (Reg reg : myRegs) {
+							String cancel = "신청됨";
+							String complete = "미수료";
+							if (reg.isCanceled()) {
+								cancel = "취소됨";
+							}
+							if (reg.isCompleted()) {
+								complete = "수료";
+							}
+							System.out.print(reg.getNo() + "\t");
+							System.out.print(reg.getCourse().getTitle() + "\t");
+							System.out.print(reg.getCourse().getProf().getName() + "\t");
+							System.out.print(cancel + "\t");
+							System.out.print(complete + "\t");
+							System.out.print(reg.getGrade() + "\t");
+							System.out.print(reg.getRegisteredDate() + "\n");
+						}
+					}
+					
+				} else if (studentMenuNo == 4) {
+					System.out.println("신청취소");
+					System.out.print("수강신청번호를 입력하세요: ");
+					int regNo = KeyboardUtil.nextInt();
+					
+					boolean isSuccess = service.cancelReg(regNo);
+				}
+				
 			}
 			
 		} // while end

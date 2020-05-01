@@ -30,6 +30,30 @@ public class CourseDAO {
 		connection.close();
 	}
 	
+	public void updateCourse(Course course) throws SQLException {
+		String registerable = "";
+		if (course.isRegisterable()) {
+			registerable = "Y";
+		} else {
+			registerable = "N";
+		}
+		
+		Connection connection = ConnectionUtil.getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("course.updateCourse"));
+		pstmt.setString(1, course.getTitle());
+		pstmt.setInt(2, course.getDept().getNo());
+		pstmt.setInt(3, course.getSubject().getNo());
+		pstmt.setInt(4, course.getProf().getNo());
+		pstmt.setInt(5, course.getStudentCount());
+		pstmt.setString(6, registerable);
+		pstmt.setInt(7, course.getNo());
+		
+		pstmt.executeUpdate();
+		
+		pstmt.close();
+		connection.close();
+	}
+	
 	public Course resultSetToCourse(ResultSet rs) throws SQLException {
 		Course course = new Course();
 		
@@ -74,6 +98,26 @@ public class CourseDAO {
 		pstmt.close();
 		connection.close();
 		return course;
+	}
+	
+	public List<Course> getCoursesByDeptNo(int deptNo) throws SQLException {
+		List<Course> deptCourses = new ArrayList<Course>();
+		
+		Connection connection = ConnectionUtil.getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("course.getCoursesByDeptNo"));
+		pstmt.setInt(1, deptNo);
+		
+		ResultSet rs = pstmt.executeQuery();
+		while (rs.next()) {
+			Course course = resultSetToCourse(rs);
+			deptCourses.add(course);
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return deptCourses;
 	}
 	
 	public List<Course> getAllCourses() throws SQLException {
