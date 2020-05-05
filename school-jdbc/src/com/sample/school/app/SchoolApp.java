@@ -191,6 +191,7 @@ public class SchoolApp {
 							System.out.print(registerable + "\n");
 						}
 					}
+					System.out.println("----------------------------------------");
 					
 				} else if (studentMenuNo == 2) {
 					System.out.println("수강신청");
@@ -213,6 +214,7 @@ public class SchoolApp {
 					} else {
 						System.out.println("!!! 수강신청 과정에서 오류가 발생했습니다.");
 					}
+					System.out.println("----------------------------------------");
 					
 				} else if (studentMenuNo == 3) {
 					System.out.println("신청내역조회");
@@ -244,6 +246,7 @@ public class SchoolApp {
 							System.out.print(reg.getRegisteredDate() + "\n");
 						}
 					}
+					System.out.println("----------------------------------------");
 					
 				} else if (studentMenuNo == 4) {
 					System.out.println("신청취소");
@@ -251,7 +254,14 @@ public class SchoolApp {
 					int regNo = KeyboardUtil.nextInt();
 					
 					boolean isSuccess = service.cancelReg(regNo);
+					
+					if (isSuccess) {
+						System.out.println("### 수강 취소가 완료되었습니다.");
+					} else {
+						System.out.println("!!! 수강 취소 과정에서 오류가 발생했습니다.");
+					}
 				}
+				System.out.println("----------------------------------------");
 				
 			}
 			

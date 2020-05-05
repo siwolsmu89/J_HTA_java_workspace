@@ -115,6 +115,12 @@ public class SchoolAppAdmin {
 				}
 			} else if (menuNo == 2) {
 				System.out.println("[교수(Prof) 관리]");
+				System.out.println("----------------------------------------");
+				System.out.println("1.신규교수등록  2.교수정보수정  3.교수삭제");
+				System.out.println("4.전체교수조회  5.교수검색");
+				System.out.println("----------------------------------------");
+				System.out.print("메뉴를 선택하세요: ");
+				int profMenuNo = KeyboardUtil.nextInt();
 				
 			} else if (menuNo == 3) {
 				System.out.println("[학생(Student) 관리]");
@@ -130,7 +136,6 @@ public class SchoolAppAdmin {
 				
 			}
 		
-			
 		} // while end
 	} // main end
 }

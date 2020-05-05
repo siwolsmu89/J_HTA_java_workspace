@@ -42,15 +42,7 @@ public class RegDAO {
 	public void updateReg(Reg reg) throws SQLException {
 		Connection connection = ConnectionUtil.getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("reg.updateReg"));
-		
-		/*
-		 * course_no = ? \
-			  	, student_no = ? \
-			  	, reg_canceled = ? \
-			  	, reg_completed = ? \
-			  	, reg_grade = ? \
-			  WHERE reg_no = ?	
-		 */
+	
 		String cancel = "N";
 		if (reg.isCanceled()) {
 			cancel = "Y";
@@ -81,7 +73,7 @@ public class RegDAO {
 			isCanceled = true;
 		}
 		boolean isCompleted = false;
-		if (rs.getString("reg_canceled").equalsIgnoreCase("Y")) {
+		if (rs.getString("reg_completed").equalsIgnoreCase("Y")) {
 			isCompleted = true;
 		}
 		
