@@ -12,7 +12,7 @@ public class HashMapDemo1 {
 		contacts.put("hong", "홍길동");
 		contacts.put("hong123", "홍길동");
 		contacts.put("kang", "강감찬");
-
+		
 		// HashMap 객체에 저장도니 값 조회하기
 		String value = contacts.get("hong");
 		System.out.println("key[hong]으로 조회한 값: " + value);
